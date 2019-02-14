@@ -1,23 +1,32 @@
 # Machine Learning Engineer Nanodegree
 ## Capstone Proposal
-Joe Udacity  
-December 31st, 2050
+Sasa Pavkovic
+February 14th, 2019
 
 ## Proposal
 _(approx. 2-3 pages)_
+Predicting future sales from Time Series data using Machine learning approaches. It is a part of a bigger domain of predicting a continous variable by using regression, hence the idea can be generalized to other types of similar challenges in predicting customer moetary value in the future. The data for the project will be taken from the Predict Future Sales competition on Kaggle. The link is provided here:
+https://www.kaggle.com/c/competitive-data-science-predict-future-sales
+
 
 ### Domain Background
 _(approx. 1-2 paragraphs)_
 
-In this section, provide brief details on the background information of the domain from which the project is proposed. Historical information relevant to the project should be included. It should be clear how or why a problem in the domain can or should be solved. Related academic research should be appropriately cited in this section, including why that research is relevant. Additionally, a discussion of your personal motivation for investigating a particular problem in the domain is encouraged but not required.
+The domain that i chose comes from business where usually one of the relevant problems is to be able to predict buying behaviour of the customers by being able to predict sales. This problem is usually solved using regression as we are predicting a continuous variable. The additional component here is the temporal component where we can use some feature engineering approaches to map the temporal relations. Also, my whish is to try out if a deep learning approach can be used sucessfully for this particular problem. 
+
+The need in business for solving this type of problem is very high as many questions can be answered by it. How much revenue can we expect from diffferent segments, in which segments to invest most marketing budgets or how to balance the marketing budget to maxmize CLV. Trying out a novel approach with Deep Neural Networks is a challenge but also very interesting. 
+
+Papers: https://arxiv.org/pdf/1708.05123.pdf
 
 ### Problem Statement
 _(approx. 1 paragraph)_
 
-In this section, clearly describe the problem that is to be solved. The problem described should be well defined and should have at least one relevant potential solution. Additionally, describe the problem thoroughly such that it is clear that the problem is quantifiable (the problem can be expressed in mathematical or logical terms) , measurable (the problem can be measured by some metric and clearly observed), and replicable (the problem can be reproduced and occurs more than once).
+The problem that will be solved is predicting future sales based on the historical observed temporal data. Main idea for solving the problem is to do feature engineering such that the temporal structure is transformed into features. Then standard regression algorithms can be used to make a prediction for the next period. We want to predict how much future sales in dollars will happen in the next year.
 
 ### Datasets and Inputs
 _(approx. 2-3 paragraphs)_
+
+The datasets will be taken from the related Kaggle competition.
 
 In this section, the dataset(s) and/or input(s) being considered for the project should be thoroughly described, such as how they relate to the problem and why they should be used. Information such as how the dataset or input is (was) obtained, and the characteristics of the dataset or input, should be included with relevant references and citations as necessary It should be clear how the dataset(s) or input(s) will be used in the project and whether their use is appropriate given the context of the problem.
 
