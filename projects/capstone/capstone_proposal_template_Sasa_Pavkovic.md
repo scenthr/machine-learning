@@ -5,30 +5,33 @@ February 14th, 2019
 
 ## Proposal
 _(approx. 2-3 pages)_
-Predicting future sales from Time Series data using Machine learning approaches. It is a part of a bigger domain of predicting a continous variable by using regression, hence the idea can be generalized to other types of similar challenges in predicting customer moetary value in the future. The data for the project will be taken from the Predict Future Sales competition on Kaggle. The link is provided here:
-https://www.kaggle.com/c/competitive-data-science-predict-future-sales
+Predicting future sales from Time Series data using machine learning approaches. It is a part of a bigger domain of predicting a continous variable, hence the idea can be generalized to other types of similar challenges in predicting customer moetary value in the future. 
+
+The data for the project will be taken from the Predict Future Sales competition on Kaggle. The link is provided here:
+* https://www.kaggle.com/c/competitive-data-science-predict-future-sales
 
 
 ### Domain Background
 _(approx. 1-2 paragraphs)_
 
-The domain that i chose comes from business where usually one of the relevant problems is to be able to predict buying behaviour of the customers by being able to predict sales. This problem is usually solved using regression as we are predicting a continuous variable. The additional component here is the temporal component where we can use some feature engineering approaches to map the temporal relations. Also, my whish is to try out if a deep learning approach can be used sucessfully for this particular problem. 
+The domain that i chose comes from business where usually one of the relevant problems is to be able to predict buying behaviour of the customers and being able to predict sales. The additional component here is the temporal component where we can use some feature engineering approaches to map the temporal relations. Also, i would like to try out if a deep learning approach can be used sucessfully for this particular problem. 
 
-The need in business for solving this type of problem is very high as many questions can be answered by it. How much revenue can we expect from diffferent segments, in which segments to invest most marketing budgets or how to balance the marketing budget to maxmize CLV. Trying out a novel approach with Deep Neural Networks is a challenge but also very interesting. 
+The need in business for solving this type of problem is very high as it can be generalized relatively easily. Some similar, but different questions can then be answered:
+* How much revenue can we expect from diffferent segments?, 
+* In which product segments to invest most of marketing budget? 
+or how to balance the marketing budget to maxmize CLV. Trying out a one of the approaches with neural networks might be a challenge but also very interesting. 
 
 Papers: https://arxiv.org/pdf/1708.05123.pdf
 
 ### Problem Statement
 _(approx. 1 paragraph)_
 
-The problem that will be solved is predicting future sales based on the historical observed temporal data. Main idea for solving the problem is to do feature engineering such that the temporal structure is transformed into features. Then standard regression algorithms can be used to make a prediction for the next period. We want to predict total sales in US dollars in the next period.
-
-[Here you can maybe change what the goal of the prediction actually is!!!]
+The problem that will be solved is predicting future sales based on the historical observed temporal data (time series). Main idea for solving the problem is to do feature engineering such that the temporal structure is transformed into features. Then standard regression algorithms can be used to make a prediction for the next period. We want to predict total sales in number of items for each store in the next period.
 
 ### Datasets and Inputs
 _(approx. 2-3 paragraphs)_
 
-The datasets will be taken from the related Kaggle competition. 
+The datasets will be taken from the related Kaggle competition mentioned at the top of the proposal. 
 
 We have daily historical sales data.  Note that the list of shops and products slightly changes every month. 
 
@@ -57,17 +60,15 @@ The data prepared for the training is representing daily observations of shop an
 
 More info on 1C company can be found here https://en.wikipedia.org/wiki/1C_Company
 
-In this section, the dataset(s) and/or input(s) being considered for the project should be thoroughly described, such as how they relate to the problem and why they should be used. Information such as how the dataset or input is (was) obtained, and the characteristics of the dataset or input, should be included with relevant references and citations as necessary It should be clear how the dataset(s) or input(s) will be used in the project and whether their use is appropriate given the context of the problem.
-
 ### Solution Statement
 _(approx. 1 paragraph)_
 
-After initial exploratory data analysis we will be applying feature engineering to create the needed temporal features and in combination with additional data available we will perform several machine learning regression algorthims to see which one of them is the best to use with the problem. We will find out which one is the best by looking how much variance is left unexplained by minimizing the Root Mean Squared Error rate or RMSE. Several iterations will be made so that the best parameters for the algorithms are found. Then the model that is the best will be applied to the test data in order to make predictions based on the test data.
+After initial exploratory data analysis we will be applying feature engineering to create the needed temporal features and in combination with additional data available we will perform several machine learning regression algorthims to see which one of them is the best to use with the problem. We will find out which one is the best by looking to minimizie the Root Mean Squared Error rate or RMSE. Several iterations will be made so that the best parameters for the algorithms are found. Then the model that is the best will be applied to the test data in order to make predictions based on the test data.
 
 ### Benchmark Model
 _(approximately 1-2 paragraphs)_
 
-In this section, provide the details for a benchmark model or result that relates to the domain, problem statement, and intended solution. Ideally, the benchmark model or result contextualizes existing methods or known information in the domain and problem given, which could then be objectively compared to the solution. Describe how the benchmark model or result is measurable (can be measured by some metric and clearly observed) with thorough detail.
+I would like to use the Linear regression as a benchmark model as it is so widely recognized as a simple yet powerfull tool. The value of the scorer function (RMSE) can be inspected on the related Kaggle competition. At the time of the writing the best score is RMSE=0.79215, so that would be the current known upper limit. Still, i would expect the results to be worse then that. So, the RMSE will be used as a metric, and linear regression algorithm as benchmark model.
 
 ### Evaluation Metrics
 _(approx. 1-2 paragraphs)_
