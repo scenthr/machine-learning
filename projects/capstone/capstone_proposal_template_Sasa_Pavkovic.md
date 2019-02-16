@@ -72,12 +72,11 @@ In this section, provide the details for a benchmark model or result that relate
 ### Evaluation Metrics
 _(approx. 1-2 paragraphs)_
 
-RMSE or Roor Mean Squared Error will be used as an evaluation metric for the performance of the models and to pick the one that will become the solution. Also others methods are popular like simply MSE, R squared, Adjusted R suared. The RMSE is chosen because of its relative simplicity. 
+RMSE or Roor Mean Squared Error will be used as an evaluation metric for the performance of the models and to pick the one that will become the solution. Also others methods are popular like simply MSE, R squared, Adjusted R suared. The RMSE is chosen because of its relative simplicity. The RMSE is developed as the squared root of the average of squared difference between values predicted by the model and values observed. 
 
-\frac{n!}{k!(n-k)!}
-
-
-In this section, propose at least one evaluation metric that can be used to quantify the performance of both the benchmark model and the solution model. The evaluation metric(s) you propose should be appropriate given the context of the data, the problem statement, and the intended solution. Describe how the evaluation metric(s) are derived and provide an example of their mathematical representations (if applicable). Complex evaluation metrics should be clearly defined and quantifiable (can be expressed in mathematical or logical terms).
+An explanation of the RMSE and its related formulae can be found at: 
+* https://en.wikipedia.org/wiki/Root-mean-square_deviation\
+* https://medium.com/human-in-a-machine-world/mae-and-rmse-which-metric-is-better-e60ac3bde13d
 
 ### Project Design
 _(approx. 1 page)_
