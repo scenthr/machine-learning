@@ -81,7 +81,11 @@ An explanation of the RMSE and its related formulae can be found at:
 ### Project Design
 _(approx. 1 page)_
 
-In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
+The data will be loaded in the python environment and then some explanatory data analysis will be performed in order to understand some of the relationships in the data better. Outliers will be looked into and if there are outliers that are also high influence points then i will consider removing them from the dataset. Next the transformation of the temporal component of the data from 1 datetime column to several different features will be considered. The infulence of each of the features will be checked by inspecting feature importance for each of the models. Scaling the data will help with increasing precision in calculating distances between datapoints. Once data is prepared it can be used in modeliing.
+
+Several algorithms will be considered for implementation Linear regression, Ridge & Lasso Regression, XGBoost and NN for regression. 
+
+Once the algortithms are parametrized i expect several iterations for each of them, as well as going back and forth between feature importance, feature selection and feature engineering until the best set of features is used in the data and best results are achieved. Linear regression is expected to behave worse then other algorithms but simplicty of the implementatin makes a good choice for the baseline model. 
 
 -----------
 
