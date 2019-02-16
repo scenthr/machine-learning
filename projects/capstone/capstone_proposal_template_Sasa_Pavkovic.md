@@ -21,23 +21,26 @@ Papers: https://arxiv.org/pdf/1708.05123.pdf
 ### Problem Statement
 _(approx. 1 paragraph)_
 
-The problem that will be solved is predicting future sales based on the historical observed temporal data. Main idea for solving the problem is to do feature engineering such that the temporal structure is transformed into features. Then standard regression algorithms can be used to make a prediction for the next period. We want to predict how much future sales in dollars will happen in the next year.
+The problem that will be solved is predicting future sales based on the historical observed temporal data. Main idea for solving the problem is to do feature engineering such that the temporal structure is transformed into features. Then standard regression algorithms can be used to make a prediction for the next period. We want to predict total sales in US dollars in the next period.
+
+[Here you can maybe change what the goal of the prediction actually is!!!]
 
 ### Datasets and Inputs
 _(approx. 2-3 paragraphs)_
 
 The datasets will be taken from the related Kaggle competition. 
 
-We have daily historical sales data.  Note that the list of shops and products slightly changes every month. Creating a robust model that can handle such situations is part of the challenge.
+We have daily historical sales data.  Note that the list of shops and products slightly changes every month. 
 
-File descriptions
+###### File descriptions ######
 sales_train.csv - the training set. Daily historical data from January 2013 to October 2015.
-test.csv - the test set. You need to forecast the sales for these shops and products for November 2015.
-sample_submission.csv - a sample submission file in the correct format.
+test.csv - the test set. The test that we will use for predictions
+sample_submission.csv - a sample submission file in the correct format (related to Kaggle submissions)
 items.csv - supplemental information about the items/products.
 item_categories.csv  - supplemental information about the items categories.
 shops.csv- supplemental information about the shops.
-Data fields
+
+###### Data fields #######
 ID - an Id that represents a (Shop, Item) tuple within the test set
 shop_id - unique identifier of a shop
 item_id - unique identifier of a product
@@ -50,12 +53,16 @@ item_name - name of item
 shop_name - name of shop
 item_category_name - name of item category
 
+The data prepared for the training is representing daily observations of shop and item sales with their respective price and total number of items sold. Only the sold items are actually in the list. Data was kindly provided by one of the largest Russian software firms - 1C Company. This is the main relevant data that came along with the Kaggle competition.
+
+More info on 1C company can be found here https://en.wikipedia.org/wiki/1C_Company
+
 In this section, the dataset(s) and/or input(s) being considered for the project should be thoroughly described, such as how they relate to the problem and why they should be used. Information such as how the dataset or input is (was) obtained, and the characteristics of the dataset or input, should be included with relevant references and citations as necessary It should be clear how the dataset(s) or input(s) will be used in the project and whether their use is appropriate given the context of the problem.
 
 ### Solution Statement
 _(approx. 1 paragraph)_
 
-In this section, clearly describe a solution to the problem. The solution should be applicable to the project domain and appropriate for the dataset(s) or input(s) given. Additionally, describe the solution thoroughly such that it is clear that the solution is quantifiable (the solution can be expressed in mathematical or logical terms) , measurable (the solution can be measured by some metric and clearly observed), and replicable (the solution can be reproduced and occurs more than once).
+After initial exploratory data analysis we will be applying feature engineering to create the needed temporal features and in combination with additional data available we will perform several machine learning regression algorthims to see which one of them is the best to use with the problem. We will find out which one is the best by looking how much variance is left unexplained by minimizing the Root Mean Squared Error rate or RMSE. Several iterations will be made so that the best parameters for the algorithms are found. Then the model that is the best will be applied to the test data in order to make predictions based on the test data.
 
 ### Benchmark Model
 _(approximately 1-2 paragraphs)_
@@ -64,6 +71,11 @@ In this section, provide the details for a benchmark model or result that relate
 
 ### Evaluation Metrics
 _(approx. 1-2 paragraphs)_
+
+RMSE or Roor Mean Squared Error will be used as an evaluation metric for the performance of the models and to pick the one that will become the solution. Also others methods are popular like simply MSE, R squared, Adjusted R suared. The RMSE is chosen because of its relative simplicity. 
+
+$y = x^2 \hbox{ when $x > 2$}$
+
 
 In this section, propose at least one evaluation metric that can be used to quantify the performance of both the benchmark model and the solution model. The evaluation metric(s) you propose should be appropriate given the context of the data, the problem statement, and the intended solution. Describe how the evaluation metric(s) are derived and provide an example of their mathematical representations (if applicable). Complex evaluation metrics should be clearly defined and quantifiable (can be expressed in mathematical or logical terms).
 
