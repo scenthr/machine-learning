@@ -1,7 +1,7 @@
 # Machine Learning Engineer Nanodegree
 ## Capstone Project
-Joe Udacity  
-December 31st, 2050
+Sasa Pavkovic  
+February 14th, 2019
 
 ## I. Definition
 _(approx. 1-2 pages)_
@@ -11,16 +11,35 @@ In this section, look to provide a high-level overview of the project in laymanâ
 - _Has an overview of the project been provided, such as the problem domain, project origin, and related datasets or input data?_
 - _Has enough background information been given so that an uninformed reader would understand the problem domain and following problem statement?_
 
+Having an ability to know what to expect from the future sales is powerfull for any company. Usuall approach is to take a look at historical data and use those in order to have an opinion about the sales in the future. 
+
+In this project we are going to take a look at the sales made by by one of the largest Russian software firms - 1C Company in the period from Jan 2013 to October 2015. The data is provided through the Kaggle competition 'Predict Future Sales'. 
+
+Link: https://www.kaggle.com/c/competitive-data-science-predict-future-sales
+
 ### Problem Statement
 In this section, you will want to clearly define the problem that you are trying to solve, including the strategy (outline of tasks) you will use to achieve the desired solution. You should also thoroughly discuss what the intended solution will be for this problem. Questions to ask yourself when writing this section:
 - _Is the problem statement clearly defined? Will the reader understand what you are expecting to solve?_
 - _Have you thoroughly discussed how you will attempt to solve the problem?_
 - _Is an anticipated solution clearly defined? Will the reader understand what results you are looking for?_
 
+Using the historical data, provided by the 1C Company, we will make predict the total items sold for every product in every store for the month of November 2015. 
+
+As we are making predictions about a continuous variable we are going to use a couple of approaches that are based on regression. We will start with a Linear Regression model as a baseline model and then continue on with some more complex models and compare the results from each of them. This will enable us to find the best model for the data that we have.
+
+The data that we are having is going to have an important temporal component, but here we will not attempt a time series analysis and predictions, but focus on how this types of problems can be solved by feature engineering that enables us to use the standard machine learning approaches.
+
 ### Metrics
 In this section, you will need to clearly define the metrics or calculations you will use to measure performance of a model or result in your project. These calculations and metrics should be justified based on the characteristics of the problem and problem domain. Questions to ask yourself when writing this section:
 - _Are the metrics youâ€™ve chosen to measure the performance of your models clearly discussed and defined?_
 - _Have you provided reasonable justification for the metrics chosen based on the problem and solution?_
+
+In this project we will be using the RMSE (Root Mean Squared Error) as a metric to compare the different approaches. MSE (Mean Squared Error) is the average of the squared differences between predictions and the observed data. The closer it is to 0 the better, but generally the score itself depends on a problem and the data that is available, hence is not easily comparable across different problems. As we will use it for comparison of different problems on the same data set, then this is appropriate metric. It is also the metric used in the Kaggle competition, and we can get the final results from Kaggle during the submissions of the predictions.
+
+More about MSE and RMSE can be found in the links below:
+* https://en.wikipedia.org/wiki/Mean_squared_error
+* https://en.wikipedia.org/wiki/Root-mean-square_deviation
+
 
 
 ## II. Analysis
@@ -32,6 +51,8 @@ In this section, you will be expected to analyze the data you are using for the 
 - _If a dataset is present for this problem, are statistics about the dataset calculated and reported? Have any relevant results from this calculation been discussed?_
 - _If a dataset is **not** present for this problem, has discussion been made about the input space or input data for your problem?_
 - _Are there any abnormalities or characteristics about the input space or dataset that need to be addressed? (categorical variables, missing values, outliers, etc.)_
+
+
 
 ### Exploratory Visualization
 In this section, you will need to provide some form of visualization that summarizes or extracts a relevant characteristic or feature about the data. The visualization should adequately support the data being used. Discuss why this visualization was chosen and how it is relevant. Questions to ask yourself when writing this section:
