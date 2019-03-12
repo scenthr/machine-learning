@@ -1,11 +1,35 @@
 # Machine Learning Engineer Nanodegree
-## Specializations
-## Project: Capstone Proposal and Capstone Project
+## Capstone Project - Predict Future Sales
 
-**Note**
+Sasa Pavkovic  
+March 11th, 2019
 
-The Capstone is a two-staged project. The first is the proposal component, where you can receive valuable feedback about your project idea, design, and proposed solution. This must be completed prior to your implementation and submitting for the capstone project. 
+**Project environment**
 
-You can find the [capstone proposal rubric here](https://review.udacity.com/#!/rubrics/410/view), and the [capstone project rubric here](https://review.udacity.com/#!/rubrics/108/view). Please ensure that you are following directions correctly before submitting these two stages which encapsulate your capstone.
+Project is done with the Anaconda distirbution of python. Python version is 3.6.6.
 
-Please email [machine-support@udacity.com](mailto:machine-support@udacity.com) if you have any questions.
+**Libraries used**
+
+Python libraries used in the project are:
+1. pandas (0.23.3)
+2. numpy (1.14.2)
+3. matplotlib (2.2.2)
+4. os 
+5. time 
+6. itertools
+7. pickle
+8. sklearn (0.19.1)
+9. xgboost (0.81)
+
+**Data used**
+
+Data can be found at the Kaggle competition 'Predict Future Sales' at link: https://www.kaggle.com/c/competitive-data-science-predict-future-sales/data
+
+**Additional information**
+
+* How to install xgboost on Win10: https://medium.com/@kalpeshnpatil/installing-xgboost-on-windows-10-64-bit-with-anaconda-python-package-e3d920622ca
+
+**Usefull resources**
+* https://towardsdatascience.com/building-a-deep-learning-model-using-keras-1548ca149d37
+* https://machinelearningmastery.com/gentle-introduction-xgboost-applied-machine-learning/
+* https://jakevdp.github.io/PythonDataScienceHandbook/05.06-linear-regression.html
