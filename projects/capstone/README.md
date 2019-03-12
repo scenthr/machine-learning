@@ -8,6 +8,14 @@ March 11th, 2019
 
 Project is done with the Anaconda distirbution of python. Python version is 3.6.6.
 
+**File organization**
+1. capstone_proposal_template_Sasa_Pavkovic.md
+2. capstone_proposal_template_Sasa_Pavkovic.pdf - proposal 
+3. capstone_report_template_Sasa_Pavkovic.md
+4. capstone_report_template_Sasa_Pavkovic.pdf - project
+5. PredictFutureSales.py - code for data retrieval
+6. README.md - description of the environment
+
 **Libraries used**
 
 Python libraries used in the project are:
