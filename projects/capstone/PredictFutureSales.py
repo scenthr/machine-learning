@@ -8,7 +8,9 @@ Created on Fri Feb 22 15:29:28 2019
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 import os
+import gc
 import time
 from itertools import product
 import pickle
@@ -18,11 +20,11 @@ from sklearn.metrics import mean_squared_error, r2_score
 from xgboost import XGBRegressor
 from xgboost import plot_importance
 
-os.chdir('C:/Users/s.pavkovic/Desktop/Python/Predict Future Sales/')
+os.chdir('/home/clevo/Desktop/SasaBackup/Python/Predict Future Sales')
 
 def df_stats(df):
     print("----------Top-5- Record----------")
-    print(df.head())
+    print(df.head(5))
     print("-----------Information-----------")
     print(df.info())
     print("-----------Data Types-----------")
@@ -36,7 +38,7 @@ def df_stats(df):
     print("----------Potential Duplicates----------")
     print(df.duplicated().sum())
 
-def elapsed_time(f):
+def timing(f):
     def wrap(*args):
         time1 = time.time()
         ret = f(*args)
@@ -56,6 +58,9 @@ df_test = pd.read_csv('competitive-data-science-predict-future-sales/test.csv').
 
 # EDDA
 # Data inspection
+df.head(15)
+
+dfs = df.describe()
 
 # Although there is an outlier in the data i am not convinced that it should be removed from the dataset yet
 df.boxplot(column=['item_cnt_day']);
@@ -310,11 +315,32 @@ df = pd.read_pickle('matrix.pkl')
 
 ############ Linear Regression
 
-X_train = df[df.date_block_num < 33].drop(['item_cnt_month'], axis=1)
-Y_train = df[df.date_block_num < 33]['item_cnt_month']
-X_valid = df[df.date_block_num == 33].drop(['item_cnt_month'], axis=1)
-Y_valid = df[df.date_block_num == 33]['item_cnt_month']
-X_test = df[df.date_block_num == 34].drop(['item_cnt_month'], axis=1)
+def createValidationSets(df, sets=3):
+    '''
+    By default creates 3 sets of train, validation and test data in time
+    series manner (keeping the sequence of events in mind)
+    '''
+    
+    cv_data = {} 
+    
+    for n in range(sets):
+        
+        period = df.date_block_num.max() - n
+        period_m1 = df.date_block_num.max() - n - 1
+        
+        X_train = df[df.date_block_num < period_m1].drop(['item_cnt_month'], axis=1)
+        Y_train = df[df.date_block_num < period_m1]['item_cnt_month']
+        X_valid = df[df.date_block_num == period_m1].drop(['item_cnt_month'], axis=1)
+        Y_valid = df[df.date_block_num == period_m1]['item_cnt_month']
+        X_test = df[df.date_block_num == period].drop(['item_cnt_month'], axis=1)
+        Y_test = df[df.date_block_num == period]['item_cnt_month']
+                
+        cv_data[n] = list([X_train, Y_train, X_valid, Y_valid, X_test])
+
+    return cv_data
+
+cv_data_sets = createValidationSets(df)
+
 
 # Scaling not great on the data
 
@@ -330,7 +356,45 @@ model.fit(
     Y_train    
     )
 
-Y_pred = model.predict(X_valid).clip(0,20)
+Y_pred = model.predict(X_valid).clip(0,20)  
+
+###############################################################################
+# Significance of the coefficients
+
+params = np.append(model.intercept_,model.coef_)
+predictions = Y_pred
+
+newX = pd.DataFrame({"Constant":np.ones(len(X_valid))}).join(pd.DataFrame(X_valid))
+MSE = (sum((Y_valid-Y_pred)**2))/(len(newX)-len(newX.columns))
+
+# Note if you don't want to use a DataFrame replace the two lines above with
+# newX = np.append(np.ones((len(X),1)), X, axis=1)
+# MSE = (sum((y-predictions)**2))/(len(newX)-len(newX[0]))
+
+var_b = MSE*(np.linalg.inv(np.dot(newX.T,newX)).diagonal())
+sd_b = np.sqrt(var_b)
+ts_b = params/ sd_b
+
+p_values =[2*(1-stats.t.cdf(np.abs(i),(len(newX)-1))) for i in ts_b]
+
+sd_b = np.round(sd_b,3)
+ts_b = np.round(ts_b,3)
+p_values = np.round(p_values,3)
+params = np.round(params,4)
+
+myDF3 = pd.DataFrame()
+myDF3["Coefficients"],myDF3["Standard Errors"],myDF3["t values"],myDF3["Probabilites"] = [params,sd_b,ts_b,p_values]
+print(myDF3)
+
+
+###11############################################################################
+
+# Plot the coefficients
+test = pd.DataFrame({'feature names':X_train.columns,'coef':model.coef_})
+test.index = X_train.columns
+test.sort_values(by='coef').plot.bar()
+
+
 # The coefficients
 print('Coefficients: \n', model.coef_)
 # The mean squared error
@@ -357,7 +421,7 @@ pickle.dump(Y_test, open('lg_test.pickle', 'wb'))
 
 
 ############ Lasso
-model = linear_model.Lasso(alpha=0.5)
+model = linear_model.Lasso(alpha=0.01)
 model.fit(
     X_train, 
     Y_train    
@@ -391,13 +455,28 @@ pickle.dump(Y_test, open('lasso_test.pickle', 'wb'))
 
 ############ Ridge Regression
 
-model = linear_model.Ridge(alpha=100)
+## Also with grid search CV
+from sklearn import linear_model
+reg = linear_model.RidgeCV(alphas=[2250.0, 2500.0, 2600.0], cv=3)
+reg.fit(X_train,Y_train)       
+reg.alpha_                                      
+##
+
+
+model = linear_model.Ridge(alpha=reg.alpha_)
 model.fit(
     X_train, 
     Y_train    
     )
 
 Y_pred = model.predict(X_valid).clip(0,20)
+
+# Plot the coefficients
+test = pd.DataFrame({'feature names':X_train.columns,'coef':model.coef_})
+test.index = X_train.columns
+test.sort_values(by='coef').plot.bar()
+
+
 # The coefficients
 print('Coefficients: \n', model.coef_)
 # The mean squared error
@@ -425,12 +504,50 @@ pickle.dump(Y_test, open('ridge_test.pickle', 'wb'))
 
 
 ########### XGBoost
+##############################################################################
+def runCVFoldsOnXGB(data_folds):
+    
+    '''
+    Takes the time series folds and applies the XGBoost and stores the results
+    in order to check for consistency
+    '''
 
-X_train = df[df.date_block_num < 33].drop(['item_cnt_month'], axis=1)
-Y_train = df[df.date_block_num < 33]['item_cnt_month']
-X_valid = df[df.date_block_num == 33].drop(['item_cnt_month'], axis=1)
-Y_valid = df[df.date_block_num == 33]['item_cnt_month']
-X_test = df[df.date_block_num == 34].drop(['item_cnt_month'], axis=1)
+    for n in range(len(data_folds)):
+
+        model = XGBRegressor(
+            max_depth=8,
+            n_estimators=1000,
+            min_child_weight=300, 
+            colsample_bytree=0.8, 
+            subsample=0.8, 
+            eta=0.3,    
+            seed=42
+            )
+        
+        model.fit(
+            data_folds[n][0], 
+            data_folds[n][1], 
+            eval_metric="rmse", 
+            eval_set=[(data_folds[n][0], data_folds[n][1]), (data_folds[n][2], data_folds[n][3])], 
+            verbose=True, 
+            early_stopping_rounds = 5)
+        
+        Y_pred = model.predict(data_folds[n][2]).clip(0, 20)
+                
+        print("Fold {} ==>".format(n))
+        
+        print("Mean squared error: %.2f"        
+              % mean_squared_error(data_folds[n][3], Y_pred))
+        
+        print("Root mean squared error: %.2f"
+              % mean_squared_error(data_folds[n][3], Y_pred)**(1/2))
+
+        print("Fold {} <==".format(n))
+        
+
+runCVFoldsOnXGB(cv_data_sets)
+
+##############################################################################
 
 model = XGBRegressor(
     max_depth=8,
@@ -496,7 +613,7 @@ def baseline_model():
 	return model
 
 # define the model
-def deeper_model():
+def larger_model():
 	# create model
 	model = Sequential()
 	model.add(Dense(32, input_dim=32, kernel_initializer='normal', activation='relu'))
@@ -520,7 +637,7 @@ def wider_model():
     model.compile(loss='mean_squared_error', optimizer='adam')
     return model
 
-@elapsed_time
+@timing
 def run_model(model, epochs, kfold_splits):
     seed = 7
     numpy
@@ -535,10 +652,10 @@ def run_model(model, epochs, kfold_splits):
 
 # evaluate baseline model with standardized dataset    
 run_model(baseline_model, 50, 8)    
-run_model(deeper_model, 50, 8)
+run_model(larger_model, 50, 8)
 run_model(wider_model, 50, 8)
     
-# sampling as not enough processing power
+
 X_train_sample = X_train.sample(n=100000, random_state=42)
 Y_train_sample = Y_train[X_train_sample.index]
 
@@ -550,7 +667,7 @@ model.fit(X_train_sample,Y_train_sample, epochs=30, batch_size=16, validation_sp
 Y_pred = model.predict(X_valid).clip(0, 20)
 MSE = mean_squared_error(Y_valid , Y_pred)
 MSE
-RMSE = MSE**(1/2)
+
 
 Y_test = model.predict(X_test).clip(0, 20)
 
@@ -561,7 +678,7 @@ submission = pd.DataFrame({
     "item_cnt_month": Y_test[:,0]
 })
 
-submission.to_csv('DNN_wide_submission.csv', index=False)
+submission.to_csv('DNN_widde_submission.csv', index=False)
 
 # save predictions for an ensemble
 pickle.dump(Y_pred, open('DNN_wide_train.pickle', 'wb'))

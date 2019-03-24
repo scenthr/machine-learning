@@ -7,20 +7,20 @@ March 11th, 2019
 
 ## I. Definition
 
-Having an ability to know what to expect from the future sales is power full for any company. Usual approach is to take a look at historical data and use those in order to have an opinion about the sales in the future. 
+Having an ability to know what to expect from the future sales is power full for any company. Usual approach is to take a look at historical data and use those in order to have an opinion about the sales in the future.
 
 The need in business for solving this type of problem is very high as it can be generalized relatively easily. Some similar, but different questions can then be answered:
-* How much revenue can we expect from diffferent segments?, 
-* In which product segments to invest most of marketing budget? 
-or how to balance the marketing budget to maxmize CLV. Trying out a one of the approaches with neural networks might be a challenge but also very interesting. 
+* How much revenue can we expect from different segments?,
+* In which product segments to invest most of marketing budget?
+or how to balance the marketing budget to maximize CLV. Trying out a one of the approaches with neural networks might be a challenge but also very interesting.
 
-In this project we are going to take a look at the sales made by by one of the largest Russian software firms - 1C Company in the period from Jan 2013 to October 2015. The data is provided through the Kaggle competition 'Predict Future Sales'. 
+In this project we are going to take a look at the sales made by by one of the largest Russian software firms - 1C Company in the period from Jan 2013 to October 2015. The data is provided through the Kaggle competition 'Predict Future Sales'.
 
 
 Link: https://www.kaggle.com/c/competitive-data-science-predict-future-sales
 
 ### Problem Statement
-Using the historical data, provided by the 1C Company, we will make predict the total items sold for every product in every store for the month of November 2015. 
+Using the historical data, provided by the 1C Company, we will make predict the total items sold for every product in every store for the month of November 2015.
 
 As we are making predictions about a continuous variable we are going to use a couple of approaches that are based on regression. We will start with a Linear Regression model as a baseline model and then continue on with some more complex models and compare the results from each of them. This will enable us to find the best model for the data that we have.
 
@@ -34,7 +34,6 @@ In this project we will be using the RMSE (Root Mean Squared Error) as a metric 
 More about MSE and RMSE can be found in the links below:
 * https://en.wikipedia.org/wiki/Mean_squared_error
 * https://en.wikipedia.org/wiki/Root-mean-square_deviation
-
 
 
 ## II. Analysis
@@ -62,87 +61,76 @@ Data for the project has been provided in 5 separate files and here are the data
 * shop_name - name of shop
 * item_category_name - name of item category
 
-The data prepared for the training is representing daily observations of shop and item sales with their respective price and total number of items sold. Initial inspection of data has shown that the data is in the.csv file format and separated through several .csv files. One of the initial tasks is going to be merging the data from the different files into a format where 1 observation holds all the needed features. The descriptions of the columns are in Russian cyrillic. 
+![data_columns](data_head_65.png)
+
+![data_columns](data_stats_65.png)
+The data prepared for the training is representing daily observations of shop and item sales with their respective price and total number of items sold. Initial inspection of data has shown that the data is in the.csv file format and separated through several .csv files. One of the initial tasks is going to be merging the data from the different files into a format where 1 observation holds all the needed features. The descriptions of the columns are in Russian cyrillic.
 
 ##### Outliers
 
 When looking at the dependent variable for the whole period there seem to be some days when many items were sold. Still, more then 1000 items sold in one day and shop has been reported only once and that is in October, which is a high seasonality period as we have seen, hence these outliers are left in the dataset.
 
-![Boxplot_item_cnt_day](C:\Users\s.pavkovic\Desktop\Python\Predict Future Sales\Boxplot_item_cnt_day.png)
+![Boxplot_item_cnt_day](Boxplot_item_cnt_day.png)
 
 Here the item_price of an item was a more extreme outlier hence this data point was removed from farhter analysis.
 
-![Boxplot_item_price](C:\Users\s.pavkovic\Desktop\Python\Predict Future Sales\Boxplot_item_price.png)
+![Boxplot_item_price](Boxplot_item_price.png)
 
 ##### Data inconsistencies
 There was just one observation where item_price was below 0, hence this observation was removed from analysis. There are many observations where the total number of items sold was negative, but this is due to more returns then sales happening in the same day for a certain item and shop, so they were not removed from the dataset.
 
 ### Exploratory Visualization
-![Product sales over period](C:\Users\s.pavkovic\Desktop\Python\Predict Future Sales\Product sales over period.png)
+![Product sales over period](Product sales over period.png)
 
 The above plot shows the development of daily sales over the period od training data. The number of items sold seems to be going down with a negative trend. The seasonality is also present in the data with the last quarter being better then the rest of the year.
 
-![Revenue over period](C:\Users\s.pavkovic\Desktop\Python\Predict Future Sales\Revenue over period.png)
+![Revenue over period](Revenue over period.png)
 
 The above plot show the revenue for the period of the training data. Here the overall trend is more constant which means that in the recent years less items were sold but for a higher price keeping the revenue constant. Seasonal component of the trend is also present with the same seasonality as for items sold.
 
-![Item categories and item counts](C:\Users\s.pavkovic\Desktop\Python\Predict Future Sales\Item categories and item counts.png)
+![Item categories and item counts](Item categories and item counts.png)
 
 Here we can have an overview of the size of the first 20 biggest item categories. There seems to be one that is quite bigger than others which would make that one important.
 
 ### Algorithms and Techniques
-In the project we will use Linear Regression algorithm as a baseline to compare against other algorithms. Other algorithms that we will compare against are:
 
-1. Ridge Regression (Least Squares implementation with l2 regularization), parameters
+Ridge regression is an improvement on the simple linear regression by using regularization in order to shrink regression coefficients (helps prevents multicolinearity between the features). This should bring an improvement to model accuracy and precision. The cost function below now has an additional parameter lambda which controls the penalty to control the difference in magnitudes of coefficients.
+![Ridge Regression cost function](RidgeRegressionCostFunction.png)
 
-  * Alpha = 0.1 (regularization strength )
-2. XGBoost Regressor(Gradient Boosting, parallel tree boosting) 
-	- link: https://xgboost.readthedocs.io/en/latest/), parameters
-	* max_depth=8, (Maximum depth of a tree)
-    * n_estimators=1000, ()
-    * min_child_weight=300, (Minimum sum of instance weight needed in a child)
-    * colsample_bytree=0.8, (This is a family of parameters for subsampling of columns)
-    * subsample=0.8, (Subsample ratio of the training instances)
-    * eta=0.3, (Step size shrinkage used in update to prevents overfitting) 
-4. DNN (simple Keras implementation)
-	* Input layer
-		* 48 nodes 	
-    	* input_dim = 32
-    	* kernel_initializer='normal'
-    	* activation='relu'
-	* Hidden layer
-		* 96 nodes	
-    	* kernel_initializer='normal'
-    	* activation='relu'
-    * Output layer 
-    	* 1 node
-    	* kernel_initializer='normal'
-    	* activation='linear'
+XGBoost or Extreme Gradient Boosting is a machine learning technique based on decision tree ensembles, where one could be consisting of a set of classification and regression trees (CART), hence it can be used on regression problems. This algorithm achieves great results in both competitions and business environments and excels in speed and parallelization. The gist of it is that we start with a simpler model that we combine into an ensemble so that we add one tree at the time. The trees are ensembled together by summing their results.  
+There are many parameters that could be tuned out of which probably the most used ones are learning rate, max_depth, subsample, n_estimators, objective and regularization parameters alpha and lambda.
 
-On all ocasions regression will be used to predict the number of items sold for each item and shop. The same dataset format will be used for all the techniques. Firstly the data will be processed in a way that is suitable for all algorithms to consume and then will be used for predictions and the algorithm that achieves the best (lowest) RMSE will be chosen as a solution. 
+The related paper on which the implementation was made can be found here: https://projecteuclid.org/download/pdf_1/euclid.aos/1013203451
 
-Data will be split into 3 smaller sets, training data (till Oct 2015), validation data (Oct 2015) and the test data. Test data will be checked through the Kaggles submission platform as the actuals for Nov. 2015 are not known. 
+XGBoost implemenatation example with objective function: https://xgboost.readthedocs.io/en/latest/tutorials/model.html
+
+XGBoost parameters: https://xgboost.readthedocs.io/en/latest/parameter.html
+
+Neural Networks are some of the most complex ideas from machine learning and also usually require a lot of data and computational power to use them efficiently. In the recent times they are achieving amazing results in Object recognition and NLP (i find especially interesting the generative models). The simplest idea behind them is the Multilayer Perceptron or MLP will be also used in this project. Note here that some more specialized NN might work better than the problem at hand, but still even a simple MLP performs rather well as we shall see. Again, there are many decisions to be made and parameters to be tuned here and some of the more used ones are number of hidden units, activation function, number of layers, regularization, optimizer, learning rate, batch size.
+
+Intersting video on MLPs: https://www.coursera.org/lecture/intro-to-deep-learning/multilayer-perceptron-mlp-yy1NV
+
+Overview on MLPs by Andrew L. Beam: https://beamandrew.github.io/deeplearning/2017/02/23/deep_learning_101_part2.html
 
 ### Benchmark
-As the data for this project is coming from the Kaggle competition "Predict Future Sales" many other Kagglers have been making their attempts at predicting the Nov 2015 sales data hence their performances could be used as benchmark. Currently the best score achieved is RMSE of 0.79215 with an unknown algorithm. 
-
+As the data for this project is coming from the Kaggle competition "Predict Future Sales" many other Kagglers have been making their attempts at predicting the Nov 2015 sales data hence their performances could be used as benchmark. Currently the best score achieved is RMSE of 0.79215 with an unknown algorithm.
 
 
 ## III. Methodology
 ### Data Preprocessing
-The idea is to combine all the available data so that we have one observation be unique for month, shop and item and a dataframe would be created. Then additional summaries would be added to the dataframe. These would include the engineered features from the temporal component of the data set. Test data set contains items that have not been previously sold hence test and train data have been combined. The data has been split such that the train data is months from 12-32 (first 12 months have been removed due to lagging used), validation set is 33 and the test set is 34. 
+The idea is to combine all the available data so that we have one observation be unique for month, shop and item and a dataframe would be created. Then additional summaries would be added to the dataframe. These would include the engineered features from the temporal component of the data set. Test data set contains items that have not been previously sold hence test and train data have been combined. The data has been split such that the train data is months from 12-32 (first 12 months have been removed due to lagging used), validation set is 33 and the test set is 34.
 
 Here is the list of features that were created by:
 1. aggregation
   * item_cnt_month (monthly items sold)
 2. lagging and aggregations:
 	* item_cnt_month_lag_1 (previous period lags of monthly items sold)
-	* item_cnt_month_lag_2 
+	* item_cnt_month_lag_2
 	* item_cnt_month_lag_3
 	* item_cnt_month_lag_6
 	* item_cnt_month_lag_9
 	* item_cnt_month_lag_12
-	* block_avg_item_cnt_lag_1 (previous periods lags of avg. items sold by month) 
+	* block_avg_item_cnt_lag_1 (previous periods lags of avg. items sold by month)
 	* block_item_avg_item_cnt_lag_1 (previous periods lags of avg. items sold by month and item)
 	* block_item_avg_item_cnt_lag_2
 	* block_item_avg_item_cnt_lag_3
@@ -167,14 +155,47 @@ Here is the list of features that were created by:
 	* item_first_purchased
 
 ### Implementation
-The process is that the training data is fed to the model and then the model is predicting the values on the validation data in order to get the idea which one of the competing algorithms is best. 
+In the project we use Linear Regression algorithm as a baseline to compare against other algorithms. Other algorithms that we will compare against are:
 
-The first model that was attempted was the Linear Regression from the python sklearn library.  This was quite straight forward. Then the Ridge model was attempted next, then XGBoost and DNN as defined in Algorithms and Techniques. 
+1. Ridge Regression (Least Squares implementation with l2 regularization), parameters
+  * Alpha = 0.1 (regularization strength )
+2. XGBoost Regressor(Gradient Boosting, parallel tree boosting)
+	- link: https://xgboost.readthedocs.io/en/latest/), parameters
+	* max_depth=8, (Maximum depth of a tree)
+    * n_estimators=1000, ()
+    * min_child_weight=300, (Minimum sum of instance weight needed in a child)
+    * colsample_bytree=0.8, (This is a family of parameters for subsampling of columns)
+    * subsample=0.8, (Subsample ratio of the training instances)
+    * eta=0.3, (Step size shrinkage used in update to prevents overfitting)
+4. DNN (simple Keras implementation)
+	* Input layer
+		* 48 nodes 	
+    	* input_dim = 32
+    	* kernel_initializer='normal'
+    	* activation='relu'
+	* Hidden layer
+		* 96 nodes
+    	* kernel_initializer='normal'
+    	* activation='relu'
+    * Output layer
+    	* 1 node
+    	* kernel_initializer='normal'
+    	* activation='linear'
+
+On all occasions regression will be used to predict the number of items sold for each item and shop. The same dataset format will be used for all the techniques. Firstly the data will be processed in a way that is suitable for all algorithms to consume and then will be used for predictions and the algorithm that achieves the best (lowest) RMSE will be chosen as a solution.
+
+Data will be split into 3 smaller sets, training data (till Oct 2015), validation data (Oct 2015) and the test data. Test data will be checked through the Kaggles submission platform as the actuals for Nov. 2015 are not known.
+
+The process is that the training data is fed to the model and then the model is predicting the values on the validation data in order to get the idea which one of the competing algorithms is best.1
+
+The first model that was attempted was the Linear Regression from the python sklearn library.  This was quite straight forward. Then the Ridge model was attempted next, then XGBoost and DNN as defined in Algorithms and Techniques.
+
+
 
 ### Refinement
-I have tried adjusting the the Ridge Regression alpha level for 0.5, 10 and 100 and all models produce no improvement when compared to the Linear Regression, hence it seems that a simpler model then the regular Linear Regression does not exist.
+I have tried adjusting the the Ridge Regression alpha level for 0.5, 10 and 100 and all models produced no improvement when compared to the Linear Regression, hence it seems that a simpler model then the regular Linear Regression does not exist. Then i tried with the alpha=2600 (after using CV to find the parameter) and finally the coefficients changed slightly. This would mean that a very heavy regularization has been put. This change does not bring and real significant improvement in RMSE which still equals the one of simple linear regression when rounded to 2 d.p. It was rather surprising for me that no relevant farther improvement could be achieved by Ridge.
 
-The XGBoost model has been attempted with max_depth 6, 8 and 10 and the best was the model with the max_depth=8. 
+The XGBoost model has been attempted with max_depth 6, 8 and 10 and the best was the model with the max_depth=8.
 
 Three different versions of DNN with 3 different structures and the one mentioned in the Algorithms and Techniques is the one that had the best performance. The network that was wider and deeper seemed to perform the best. Still, more time could be spent in creating a more elaborate neural network. This was also at the limit of my hardware capacities.
 
@@ -185,16 +206,19 @@ Scaling of all relevant variables was attempted to check the impact on the model
 
 ## IV. Results
 ### Model Evaluation and Validation
-On the data prepared the Linear / Ridge models achieved the RMSE of 1.02256, which is somewhat worse then the benchmark of 0.79215. This seems in the range of what i would expected, and also shows that a very simple model on this dataset already achieves a good result. 
+On the data prepared the Linear / Ridge models achieved the RMSE of 1.02256, which is somewhat worse then the benchmark of 0.79215. This seems in the range of what i would expected, and also shows that a very simple model on this dataset already achieves a good result.
 
 XGBoost with selected parameters (max_depth=8, n_estimators=1000, min_child_weight=300, colsample_bytree=0.8, subsample=0.8, eta=0.3, seed=42) achieved an RMSE of 0.99509 which is an improvement from LG, but still some ways away from the benchmark.  It is possible that more parameter tuning needs to be done in order to achieve better results.
 
-DNN with the structure as explained in Algorithms and Techniques achieved an RMSE of 1.03713 which is slightly worse then LG. There might be several reasons for such a performance, one of the major ones are the type of the problem to be solved (data is well structured and regression is needed) size of the dataset (DNN 'prefer' abundance of data), and lack of computational power (for DNN). 
+DNN with the structure as explained in Algorithms and Techniques achieved an RMSE of 1.03713 which is slightly worse then LG. There might be several reasons for such a performance, one of the major ones are the type of the problem to be solved (data is well structured and regression is needed) size of the dataset (DNN 'prefer' abundance of data), and lack of computational power (for DNN).
 
-All the models performed well, maybe only surprising for me was the difference in their performance which was relatively small. This might suggest that the biggest changes might yet be achieved through additional changes to the input data, rather then selecting an additional model. 
+All the models performed well, maybe only surprising for me was the difference in their performance which was relatively small. This might suggest that the biggest changes might yet be achieved through additional changes to the input data, rather then selecting an additional model.
 
+For the best performing model, XGBoost Time Series cross validation was performed, with 3 separate test and validation data sets. With each new set the last month is removed from the dataset and used in the model validation.
+
+As such the the previous the last fold has the lowest RMSE at 0.92 in the first fold (last month), 0.88 in the second (1 month before last month) and 0.77 in the third (2 months before last month). Hence, the model is somewhat stable, and also performs slightly better in the previous months.
 ### Justification
-Although the performance of the best algorithm used was weaker then the benchmark, still a good result has been achieved. The model that would be selected for the production would be XGB or also possibly Random Forrest algorithms which should achieve a bit worse but still respectable results. 
+Although the performance of the best algorithm used was weaker then the benchmark, still a good result has been achieved. The model that would be selected for the production would be XGB or also possibly Random Forrest algorithms which should achieve a bit worse but still respectable results.
 
 If the sales behave similar to previous years, then an improvement in ability to predict future sales have been achieved. Understanding the market is difficult, and there might be some features about it that have not been included in the data, hence sudden changes would affect any model seriously.
 
@@ -207,13 +231,13 @@ The performance of the algorithms is somewhat consistent with the research done 
 ### Free-Form Visualization
 ![XGBoost_Feature_Importances_2](C:\Users\s.pavkovic\Desktop\Python\Predict Future Sales\XGBoost_Feature_Importances_2.jpg)
 
-Above is the chart of feature importance scored by the F score from the XGBoost model (best performing). It is interesting that the most important feature is the item_category_id. In my mind this suggest that more could be done with the feature engineering. 
+Above is the chart of feature importance scored by the F score from the XGBoost model (best performing). It is interesting that the most important feature is the item_category_id. In my mind this suggest that more could be done with the feature engineering.
 
-Also the more important sales features are the ones that have happened in the recent times. That makes sense as the products that were 'hot' last month are also likely to be important in the next month, but not so much in the next year (the types of products are computer games and all related to it). Also month is a fairly important feature, which also makes sense due to the seasonality that we observed previously. 
+Also the more important sales features are the ones that have happened in the recent times. That makes sense as the products that were 'hot' last month are also likely to be important in the next month, but not so much in the next year (the types of products are computer games and all related to it). Also month is a fairly important feature, which also makes sense due to the seasonality that we observed previously.
 
 ### Reflection
 
-The initial problem of predicting the sales in the next month was set up as a problem where we want the predict a continuous variable. The most consuming task was preparing the data for the model. As we have also a temporal component we had to find ways to transform that information into some quality features. We have applied a couple of algorithms and checked their performance on the same metric and also compared to a benchmark from Kaggle. 
+The initial problem of predicting the sales in the next month was set up as a problem where we want the predict a continuous variable. The most consuming task was preparing the data for the model. As we have also a temporal component we had to find ways to transform that information into some quality features. We have applied a couple of algorithms and checked their performance on the same metric and also compared to a benchmark from Kaggle.
 
 It was interesting to find that the linear regression was not that far off from the other algorithms that we tried. I would have expected a huge improvement from the more advanced methods. Perhaps more tuning or changing the structure of the DNN might change the difference to be more drastic.
 
@@ -222,7 +246,7 @@ The most difficult aspect of the project was data wrangling and thinking how to 
 The best model, XGBoost, has been used in many competitive challenges and also in the production environment of many famous companies and it is very robust to the type of problem that we have here. In a way it is not a surprise that it performed best.
 
 ### Improvement
-There is potential for improvement in this project! For instance i believe that still more can be done with feature engineering, especially with combining the item_category_id with some other temporal aspects as maybe the recent item categories are more relevant then the distant ones. Also, we have some item_ids in the test set that we do not have in the training set, hence maybe using the averages of the item categories can help the model in finding the future sales of those items. 
+There is potential for improvement in this project! For instance i believe that still more can be done with feature engineering, especially with combining the item_category_id with some other temporal aspects as maybe the recent item categories are more relevant then the distant ones. Also, we have some item_ids in the test set that we do not have in the training set, hence maybe using the averages of the item categories can help the model in finding the future sales of those items.
 
 More complex architectures of DNNs could be employed with additional layers as well as some already prepared NN could be used that are already prepared for these types of problems. Then their parameters could be fine tuned.
 

@@ -5,7 +5,7 @@ February 14th, 2019
 
 ## Proposal
 _(approx. 2-3 pages)_
-Predicting future sales from Time Series data using machine learning approaches. It is a part of a bigger domain of predicting a continous variable, hence the idea can be generalized to other types of similar challenges in predicting customer moetary value in the future. 
+Predicting future sales from Time Series data using machine learning approaches. It is a part of a bigger domain of predicting a continuous variable, hence the idea can be generalized to other types of similar challenges in predicting customer monetary value in the future.
 
 The data for the project will be taken from the Predict Future Sales competition on Kaggle. The link is provided here:
 * https://www.kaggle.com/c/competitive-data-science-predict-future-sales
@@ -14,12 +14,12 @@ The data for the project will be taken from the Predict Future Sales competition
 ### Domain Background
 _(approx. 1-2 paragraphs)_
 
-The domain that i chose comes from business where usually one of the relevant problems is to be able to predict buying behaviour of the customers and being able to predict sales. The additional component here is the temporal component where we can use some feature engineering approaches to map the temporal relations. Also, i would like to try out if a deep learning approach can be used sucessfully for this particular problem. 
+The domain that i chose comes from business where usually one of the relevant problems is to be able to predict buying behavior of the customers and being able to predict sales. The additional component here is the temporal component where we can use some feature engineering approaches to map the temporal relations. Also, i would like to try out if a deep learning approach can be used successfully for this particular problem.
 
 The need in business for solving this type of problem is very high as it can be generalized relatively easily. Some similar, but different questions can then be answered:
-* How much revenue can we expect from diffferent segments?, 
-* In which product segments to invest most of marketing budget? 
-or how to balance the marketing budget to maxmize CLV. Trying out a one of the approaches with neural networks might be a challenge but also very interesting. 
+* How much revenue can we expect from different segments?,
+* In which product segments to invest most of marketing budget?
+or how to balance the marketing budget to maximize CLV. Trying out a one of the approaches with neural networks might be a challenge but also very interesting.
 
 Papers: https://arxiv.org/pdf/1708.05123.pdf
 
@@ -31,9 +31,9 @@ The problem that will be solved is predicting future sales based on the historic
 ### Datasets and Inputs
 _(approx. 2-3 paragraphs)_
 
-The datasets will be taken from the related Kaggle competition mentioned at the top of the proposal. 
+The datasets will be taken from the related Kaggle competition mentioned at the top of the proposal.
 
-We have daily historical sales data.  Note that the list of shops and products slightly changes every month. 
+We have daily historical sales data.  Note that the list of shops and products slightly changes every month.
 
 ###### File descriptions ######
 sales_train.csv - the training set. Daily historical data from January 2013 to October 2015.
@@ -73,9 +73,9 @@ I would like to use the Linear regression as a benchmark model as it is so widel
 ### Evaluation Metrics
 _(approx. 1-2 paragraphs)_
 
-RMSE or Roor Mean Squared Error will be used as an evaluation metric for the performance of the models and to pick the one that will become the solution. Also others methods are popular like simply MSE, R squared, Adjusted R suared. The RMSE is chosen because of its relative simplicity. The RMSE is developed as the squared root of the average of squared difference between values predicted by the model and values observed. 
+RMSE or Roor Mean Squared Error will be used as an evaluation metric for the performance of the models and to pick the one that will become the solution. Also others methods are popular like simply MSE, R squared, Adjusted R suared. The RMSE is chosen because of its relative simplicity. The RMSE is developed as the squared root of the average of squared difference between values predicted by the model and values observed.
 
-An explanation of the RMSE and its related formulae can be found at: 
+An explanation of the RMSE and its related formulae can be found at:
 * https://en.wikipedia.org/wiki/Root-mean-square_deviation\
 * https://medium.com/human-in-a-machine-world/mae-and-rmse-which-metric-is-better-e60ac3bde13d
 
@@ -84,8 +84,8 @@ _(approx. 1 page)_
 
 The data will be loaded in the python environment and then some explanatory data analysis will be performed in order to understand some of the relationships in the data better. Outliers will be looked into and if there are outliers that are also high influence points then i will consider removing them from the dataset. Next the transformation of the temporal component of the data from 1 datetime column to several different features will be considered. The infulence of each of the features will be checked by inspecting feature importance for each of the models. Scaling the data will help with increasing precision in calculating distances between datapoints. Once data is prepared it can be used in modeliing.
 
-Several algorithms will be considered for implementation Linear regression, Ridge & Lasso Regression, XGBoost and NN for regression. 
+Several algorithms will be considered for implementation Linear regression, Ridge & Lasso Regression, XGBoost and NN for regression.
 
-Once the algortithms are parametrized i expect several iterations for each of them, as well as going back and forth between feature importance, feature selection and feature engineering until the best set of features is used in the data and best results are achieved. Linear regression is expected to behave worse then other algorithms but simplicty of the implementatin makes a good choice for the baseline model. 
+Once the algortithms are parametrized i expect several iterations for each of them, as well as going back and forth between feature importance, feature selection and feature engineering until the best set of features is used in the data and best results are achieved. Linear regression is expected to behave worse then other algorithms but simplicty of the implementatin makes a good choice for the baseline model.
 
 -----------
